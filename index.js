@@ -17,7 +17,7 @@ app.listen(PORT, () => {
   console.log(`API listening on PORT ${PORT} `)
 })
 
-app.post('/send-data', async (req, res) => {
+app.post('/status_update', async (req, res) => {
   try {
       const { status, data, type } = req.body;
 
