@@ -8,8 +8,8 @@ const cors = require('cors');
 const app = express()
 const PORT = 4000
 const whatsappApiUrl = process.env.WHATSAPP_API_URL;
-// const identityApiBaseUrl = process.env.IDENTITY_API_BASE_URL;
-// const apiKey = process.env.API_KEY;
+const identityApiBaseUrl = process.env.IDENTITY_API_BASE_URL;
+const apiKey = process.env.API_KEY;
 
 app.use(cors());
 app.use(express.json());
