@@ -46,27 +46,32 @@ app.post('/status_update', async (req, res) => {
 
 
 
-// app.post('/authenticateFacial', async (req, res) => {
-//   try {
-//       const response = await axios.post(
-//           `${identityApiBaseUrl}/services/authenticateFacial`,
-//           {
-//               token1: req.body.token1,
-//               token2: req.body.token2,
-//               method: req.body.method,
-//               tracking: req.body.tracking
-//           },
-//           {
-//               headers: {
-//                   'x-api-key': apiKey,
-//                   'Content-Type': 'application/json'
-//               }
-//           }
-//       );
-//       res.json(response.data);
-//   } catch (error) {
-//       res.status(error.response?.status || 500).json({ error: error.message });
-//   }
-// });
+app.post('/authenticateFacial', async (req, res) => {
+  try {
+      const { token1, token2, method } = req.body;
+
+      if (!token1 || !token2 || !method) {
+        return res.status(400).json({ error: "Missing required fields" });
+      }
+
+      const response = await axios.post(
+          `${identityApiBaseUrl}/services/authenticateFacial`,
+          {
+              token1,
+              token2,
+              method,
+          },
+          {
+              headers: {
+                  'x-api-key': apiKey,
+                  'Content-Type': 'application/json'
+              }
+          }
+      );
+      res.json(response.data);
+  } catch (error) {
+      res.status(error.response?.status || 500).json({ error: error.message });
+  }
+});
 
 module.exports = app
