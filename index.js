@@ -8,9 +8,11 @@ const cors = require('cors');
 const app = express()
 const PORT = 4000
 const whatsappApiUrl = process.env.WHATSAPP_API_URL;
+const IDENTITY_API_BASE_URL = process.env.IDENTITY_API_BASE_URL;
+const API_KEY = process.env.API_KEY;
 
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true }));
 
 app.listen(PORT, () => {
@@ -44,9 +46,27 @@ app.post('/status_update', async (req, res) => {
 
 
 
-app.get('/about', (req, res) => {
-  res.send('This is my about route..... ')
-})
+app.post('/authenticateFacial', async (req, res) => {
+  try {
+      const response = await axios.post(
+          `${IDENTITY_API_BASE_URL}/services/authenticateFacial`,
+          {
+              token1: req.body.token1,
+              token2: req.body.token2,
+              method: req.body.method,
+              tracking: req.body.tracking
+          },
+          {
+              headers: {
+                  'x-api-key': API_KEY,
+                  'Content-Type': 'application/json'
+              }
+          }
+      );
+      res.json(response.data);
+  } catch (error) {
+      res.status(error.response?.status || 500).json({ error: error.message });
+  }
+});
 
-// Export the Express API
 module.exports = app
